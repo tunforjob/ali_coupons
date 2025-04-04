@@ -1,0 +1,60 @@
+{
+  "coupons": [
+    {
+      "id": "1",
+      "name": "Купон 1000/100",
+      "minAmount": 1000,
+      "discount": 100,
+      "maxDiscount": 100,
+      "expiryDate": "2024-12-31"
+    },
+    {
+      "id": "2",
+      "name": "Купон 2000/200",
+      "minAmount": 2000,
+      "discount": 200,
+      "maxDiscount": 200,
+      "expiryDate": "2024-12-31"
+    },
+    {
+      "id": "3",
+      "name": "Купон 3000/300",
+      "minAmount": 3000,
+      "discount": 300,
+      "maxDiscount": 300,
+      "expiryDate": "2024-12-31"
+    }
+  ],
+  "products": [
+    {
+      "id": "1",
+      "name": "Смартфон",
+      "price": 15000,
+      "category": "Электроника"
+    },
+    {
+      "id": "2",
+      "name": "Ноутбук",
+      "price": 45000,
+      "category": "Электроника"
+    },
+    {
+      "id": "3",
+      "name": "Наушники",
+      "price": 3000,
+      "category": "Электроника"
+    },
+    {
+      "id": "4",
+      "name": "Часы",
+      "price": 5000,
+      "category": "Аксессуары"
+    },
+    {
+      "id": "5",
+      "name": "Сумка",
+      "price": 2500,
+      "category": "Аксессуары"
+    }
+  ]
+} 

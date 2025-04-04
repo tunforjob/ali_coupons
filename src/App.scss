@@ -1,0 +1,245 @@
+.app {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.navbar {
+  position: relative;
+  overflow: hidden;
+  background-color: #0d6efd !important;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/src/img/background.png');
+    background-size: cover;
+    background-position: right center;
+    opacity: 1;
+    z-index: 1;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to left, #0d6efd 0%, transparent 100%);
+    z-index: 2;
+  }
+
+  .container {
+    position: relative;
+    z-index: 3;
+  }
+
+  .navbar-brand {
+    color: white !important;
+  }
+
+  .language-buttons {
+    .btn-outline-light {
+      color: white;
+      border-color: white;
+      
+      &:hover, &.active {
+        background-color: white;
+        color: #0d6efd;
+      }
+    }
+  }
+}
+
+.section-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+
+.language-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+
+.editable-cell {
+  cursor: pointer;
+  text-decoration: underline;
+  color: #0d6efd;
+  &:hover {
+    color: #0a58ca;
+  }
+}
+
+// Table row animation
+.table-row-enter {
+  opacity: 1;
+  max-height: 100px;
+  overflow: hidden;
+}
+
+.table-row-enter-active {
+  opacity: 0;
+  max-height: 0;
+  transition: opacity 300ms ease-out, max-height 300ms ease-out;
+}
+
+.table-row-exit {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+}
+
+.table-row-exit-active {
+  opacity: 1;
+  max-height: 100px;
+  transition: opacity 300ms ease-in, max-height 300ms ease-in;
+}
+
+// Results flash animation
+@keyframes flash {
+  0% { background-color: transparent; }
+  50% { background-color: rgba(13, 110, 253, 0.1); }
+  100% { background-color: transparent; }
+}
+
+.results-flash {
+  animation: flash 500ms ease-in-out;
+}
+
+// Table column width for delete buttons
+.delete-column {
+  width: 1%;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .section-container {
+    padding: 15px;
+  }
+}
+
+.table-responsive {
+  margin-top: 1rem;
+}
+
+.badge {
+  font-size: 0.875rem;
+  padding: 0.5em 0.75em;
+}
+
+// Fix for modal scrolling
+.modal {
+  overflow-y: auto !important;
+  padding-right: 0 !important;
+}
+
+.modal-dialog {
+  margin: 1.75rem auto;
+}
+
+// Ensure proper spacing between sections
+.mb-4 {
+  margin-bottom: 1.5rem !important;
+}
+
+.nav-link {
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #0d6efd !important;
+  }
+}
+
+// Custom scrollbar for section containers
+.section-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.section-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.section-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+
+  &:hover {
+    background: #555;
+  }
+}
+
+// Coupon badges styles
+.coupons-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.coupon-badge {
+  background-color: white !important;
+  border: 2px dashed #0d6efd;
+  color: #0d6efd;
+  font-size: 1.1rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  height: 2.5rem;
+
+  &:hover {
+    background-color: #f8f9fa !important;
+  }
+
+  .delete-btn {
+    background: none;
+    border: none;
+    color: #dc3545;
+    padding: 0;
+    margin-left: 0.5rem;
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      color: #bb2d3b;
+    }
+  }
+}
+
+.add-coupon-btn {
+  height: 2.5rem;
+  padding: 0 1rem;
+  display: inline-flex;
+  align-items: center;
+  border: 2px dashed #0d6efd;
+  background-color: white;
+  color: #0d6efd;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #f8f9fa;
+    color: #0d6efd;
+  }
+} 
