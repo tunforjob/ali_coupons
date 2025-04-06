@@ -28,3 +28,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages 
           folder: dist 
+
+      - name: Adjust asset paths in index.html
+        run: |
+          sed -i 's|href="/assets|href="assets|g' dist/index.html
