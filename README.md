@@ -128,4 +128,4 @@ The application uses a greedy algorithm to optimize coupon usage:
 - Additional optimization algorithms
 - More sophisticated product grouping
 - Advanced filtering and sorting options
-- User authentication and personal accounts 
+- User authentication and personal accounts
