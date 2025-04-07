@@ -4,7 +4,7 @@ A web application to optimize the usage of AliExpress coupons and maximize savin
 
 ## Usage 
 
-[AliExpress Coupons Optimizer](https://tunforjob.github.io/ali_coupons/dist/index.html)
+[AliExpress Coupons Optimizer](https://tunforjob.github.io/ali_coupons/index.html)
 
 
 ## Features
