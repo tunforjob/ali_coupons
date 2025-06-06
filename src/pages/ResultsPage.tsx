@@ -45,21 +45,45 @@ const ResultsPage = () => {
     const product = products.find(p => p.id === productId);
     return product ? product.name : productId;
   };
+  
+  // Helper function to get the product by ID
+  const getProductById = (productId: string) => {
+    return products.find(p => p.id === productId);
+  };
 
   const calculateGroupTotal = (groupResults: OptimizationResult[]) => {
     return groupResults.reduce((sum, result) => sum + result.originalPrice, 0);
+  };
+  
+  // Calculate the total personal discount for a group of results
+  const calculateGroupPersonalDiscount = (groupResults: OptimizationResult[]) => {
+    return groupResults.reduce((sum, result) => {
+      const product = getProductById(result.productId);
+      return sum + (product?.personalDiscount || 0);
+    }, 0);
   };
 
   const calculateGroupSavings = (groupResults: OptimizationResult[]) => {
     return groupResults.reduce((sum, result) => sum + result.savings, 0);
   };
 
+  // Helper function to get adjusted price (price minus personal discount)
+  const getAdjustedPrice = (product: any): number => {
+    return Math.max(0, product.price - (product.personalDiscount || 0));
+  };
+
   // Calculate total statistics
   const totalOriginalPrice = results.reduce((sum, result) => sum + result.originalPrice, 0) +
                            unusedProducts.reduce((sum, product) => sum + product.price, 0);
+  
+  // For discounted price, we need to account for both coupon discounts and personal discounts
   const totalDiscountedPrice = results.reduce((sum, result) => sum + result.discountedPrice, 0) +
-                              unusedProducts.reduce((sum, product) => sum + product.price, 0);
-  const totalSavings = results.reduce((sum, result) => sum + result.savings, 0);
+                              unusedProducts.reduce((sum, product) => sum + getAdjustedPrice(product), 0);
+  
+  // Total savings includes both coupon savings and personal discounts
+  const couponSavings = results.reduce((sum, result) => sum + result.savings, 0);
+  const personalDiscountSavings = unusedProducts.reduce((sum, product) => sum + (product.personalDiscount || 0), 0);
+  const totalSavings = couponSavings + personalDiscountSavings;
 
   return (
     <div className="results-page">
@@ -105,15 +129,32 @@ const ResultsPage = () => {
                   {groupResults.map((result) => (
                     <tr key={`${result.couponId}-${result.productId}`}>
                       <td>{getProductName(result.productId)}</td>
-                      <td>${result.originalPrice.toFixed(2)}</td>
+                      <td>
+                        ${result.originalPrice.toFixed(2)}
+                        {(getProductById(result.productId)?.personalDiscount || 0) > 0 && (
+                          <span className="ms-2" style={{ color: 'green' }}>
+                            (-${(getProductById(result.productId)?.personalDiscount || 0).toFixed(2)})
+                          </span>
+                        )}
+                      </td>
                       <td>${result.discountedPrice.toFixed(2)}</td>
                     </tr>
                   ))}
                   <tr className="table-info">
                     <td><strong>{t('results.summary')}</strong></td>
-                    <td><strong>${calculateGroupTotal(groupResults).toFixed(2)}</strong></td>
-                    <td colSpan={2}><strong>${(calculateGroupTotal(groupResults) - calculateGroupSavings(groupResults)).toFixed(2)}</strong></td>
-
+                    <td>
+                      <strong>${calculateGroupTotal(groupResults).toFixed(2)}</strong>
+                      {calculateGroupPersonalDiscount(groupResults) > 0 && (
+                        <span className="ms-2" style={{ color: 'green' }}>
+                          <strong>(-${calculateGroupPersonalDiscount(groupResults).toFixed(2)})</strong>
+                        </span>
+                      )}
+                    </td>
+                    <td>
+                      <strong>
+                        ${(calculateGroupTotal(groupResults) - calculateGroupSavings(groupResults) - calculateGroupPersonalDiscount(groupResults)).toFixed(2)}
+                      </strong>
+                    </td>
                   </tr>
                 </tbody>
               </Table>
@@ -141,12 +182,26 @@ const ResultsPage = () => {
                   {unusedProducts.map((product) => (
                     <tr key={product.id}>
                       <td>{product.name}</td>
-                      <td>${product.price.toFixed(2)}</td>
+                      <td>
+                        ${product.price.toFixed(2)}
+                        {product.personalDiscount > 0 && (
+                          <span className="ms-2" style={{ color: 'green' }}>
+                            (-${product.personalDiscount.toFixed(2)})
+                          </span>
+                        )}
+                      </td>
                     </tr>
                   ))}
                   <tr className="table-info">
                     <td><strong>{t('results.summary')}</strong></td>
-                    <td><strong>${unusedProducts.reduce((sum, p) => sum + p.price, 0).toFixed(2)}</strong></td>
+                    <td>
+                      <strong>${unusedProducts.reduce((sum, p) => sum + p.price, 0).toFixed(2)}</strong>
+                      {personalDiscountSavings > 0 && (
+                        <span className="ms-2" style={{ color: 'green' }}>
+                          <strong>(-${personalDiscountSavings.toFixed(2)})</strong>
+                        </span>
+                      )}
+                    </td>
                   </tr>
                 </tbody>
               </Table>

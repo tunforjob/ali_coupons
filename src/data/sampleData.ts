@@ -29,24 +29,28 @@ export const sampleProducts: Product[] = [
     id: '1',
     name: 'Товар 1',
     price: 150,
+    personalDiscount: 0,
     isUsed: false,
   },
   {
     id: '2',
     name: 'Товар 2',
     price: 250,
+    personalDiscount: 5.50,
     isUsed: false,
   },
   {
     id: '3',
     name: 'Товар 3',
     price: 350,
+    personalDiscount: 0,
     isUsed: false,
   },
   {
     id: '4',
     name: 'Товар 4',
     price: 450,
+    personalDiscount: 10,
     isUsed: false,
   },
 ]; 

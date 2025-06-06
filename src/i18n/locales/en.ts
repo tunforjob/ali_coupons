@@ -43,6 +43,7 @@ export const en = {
     edit: 'Edit Product',
     name: 'Product Name',
     price: 'Product Price ($)',
+    personalDiscount: 'Personal Discount ($)',
     delete: 'Delete Product',
   },
   results: {

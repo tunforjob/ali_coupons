@@ -25,7 +25,7 @@ export const testCases: TestCase[] = [
   {
     name: "Single product with single coupon",
     products: [
-      { id: "1", name: "Product 1", price: 100, isUsed: false }
+      { id: "1", name: "Product 1", price: 100, personalDiscount: 0, isUsed: false }
     ],
     coupons: [
       { id: "1", minAmount: 90, discount: 10, quantity: 1 }
@@ -37,8 +37,8 @@ export const testCases: TestCase[] = [
   {
     name: "Two products split discount",
     products: [
-      { id: "1", name: "Product 1", price: 8, isUsed: false },
-      { id: "2", name: "Product 2", price: 6, isUsed: false }
+      { id: "1", name: "Product 1", price: 8, personalDiscount: 0, isUsed: false },
+      { id: "2", name: "Product 2", price: 6, personalDiscount: 0, isUsed: false }
     ],
     coupons: [
       { id: "1", minAmount: 14, discount: 4, quantity: 1 }
@@ -50,10 +50,10 @@ export const testCases: TestCase[] = [
   {
     name: "Multiple products with multiple coupons",
     products: [
-      { id: "1", name: "Product 1", price: 100, isUsed: false },
-      { id: "2", name: "Product 2", price: 50, isUsed: false },
-      { id: "3", name: "Product 3", price: 30, isUsed: false },
-      { id: "4", name: "Product 4", price: 20, isUsed: false }
+      { id: "1", name: "Product 1", price: 100, personalDiscount: 0, isUsed: false },
+      { id: "2", name: "Product 2", price: 50, personalDiscount: 0, isUsed: false },
+      { id: "3", name: "Product 3", price: 30, personalDiscount: 0, isUsed: false },
+      { id: "4", name: "Product 4", price: 20, personalDiscount: 0, isUsed: false }
     ],
     coupons: [
       { id: "1", minAmount: 90, discount: 20, quantity: 1 },
@@ -66,8 +66,8 @@ export const testCases: TestCase[] = [
   {
     name: "Products below minimum amount",
     products: [
-      { id: "1", name: "Product 1", price: 40, isUsed: false },
-      { id: "2", name: "Product 2", price: 30, isUsed: false }
+      { id: "1", name: "Product 1", price: 40, personalDiscount: 0, isUsed: false },
+      { id: "2", name: "Product 2", price: 30, personalDiscount: 0, isUsed: false }
     ],
     coupons: [
       { id: "1", minAmount: 100, discount: 20, quantity: 1 }
@@ -79,9 +79,9 @@ export const testCases: TestCase[] = [
   {
     name: "Maximize total savings",
     products: [
-      { id: "1", name: "Product 1", price: 100, isUsed: false },
-      { id: "2", name: "Product 2", price: 80, isUsed: false },
-      { id: "3", name: "Product 3", price: 60, isUsed: false }
+      { id: "1", name: "Product 1", price: 100, personalDiscount: 0, isUsed: false },
+      { id: "2", name: "Product 2", price: 80, personalDiscount: 0, isUsed: false },
+      { id: "3", name: "Product 3", price: 60, personalDiscount: 0, isUsed: false }
     ],
     coupons: [
       { id: "1", minAmount: 150, discount: 30, quantity: 1 },  // Could be used for products 1+2 (180)
@@ -134,6 +134,11 @@ export const runTests = () => {
   return passedTests === testCases.length;
 };
 
+// Helper function to get adjusted price (price minus personal discount)
+const getAdjustedPrice = (product: Product): number => {
+  return Math.max(0, product.price - (product.personalDiscount || 0));
+};
+
 const findBestCombination = (products: Product[], minAmount: number, discount: number): KnapsackItem | null => {
   // Try all possible combinations
   let bestCombination: Product[] | null = null;
@@ -155,8 +160,9 @@ const findBestCombination = (products: Product[], minAmount: number, discount: n
 
     // Try adding more products
     for (let i = index; i < products.length; i++) {
+      const adjustedPrice = getAdjustedPrice(products[i]);
       currentProducts.push(products[i]);
-      findCombinations(i + 1, currentProducts, currentSum + products[i].price);
+      findCombinations(i + 1, currentProducts, currentSum + adjustedPrice);
       currentProducts.pop();
     }
   };
@@ -204,13 +210,14 @@ const findOptimalSolution = (coupons: Coupon[], products: Product[], usedProduct
       
       // Add results for each product
       selectedProducts.forEach(product => {
-        const proportionalDiscount = (product.price / totalValue) * savings;
+        const adjustedPrice = getAdjustedPrice(product);
+        const proportionalDiscount = (adjustedPrice / totalValue) * savings;
         
         currentResults.push({
           couponId: coupon.id,
           productId: product.id,
           originalPrice: product.price,
-          discountedPrice: product.price - proportionalDiscount,
+          discountedPrice: adjustedPrice - proportionalDiscount,
           savings: proportionalDiscount
         });
         

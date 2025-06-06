@@ -16,10 +16,12 @@ const ProductsPage = () => {
   const [formData, setFormData] = useState({
     name: '',
     price: '',
+    personalDiscount: '',
   });
   const [errors, setErrors] = useState({
     name: '',
     price: '',
+    personalDiscount: '',
   });
 
   const handleShowModal = (product?: Product) => {
@@ -28,12 +30,14 @@ const ProductsPage = () => {
       setFormData({
         name: product.name,
         price: product.price.toString(),
+        personalDiscount: product.personalDiscount ? product.personalDiscount.toString() : '0',
       });
     } else {
       setEditingProduct(null);
       setFormData({
         name: '',
         price: '',
+        personalDiscount: '0',
       });
     }
     setShowModal(true);
@@ -45,10 +49,12 @@ const ProductsPage = () => {
     setFormData({
       name: '',
       price: '',
+      personalDiscount: '0',
     });
     setErrors({
       name: '',
       price: '',
+      personalDiscount: '',
     });
   };
 
@@ -63,6 +69,7 @@ const ProductsPage = () => {
       id: editingProduct?.id || crypto.randomUUID(),
       name: formData.name.trim(),
       price: Number(formData.price),
+      personalDiscount: Number(formData.personalDiscount) || 0,
       isUsed: false,
     };
 
@@ -108,7 +115,14 @@ const ProductsPage = () => {
                     >
                       {product.name}
                     </td>
-                    <td>${product.price.toFixed(2)}</td>
+                    <td>
+                      ${product.price.toFixed(2)}
+                      {product.personalDiscount > 0 && (
+                        <span className="ms-2" style={{ color: 'green' }}>
+                          (-${product.personalDiscount.toFixed(2)})
+                        </span>
+                      )}
+                    </td>
                     <td className="delete-column">
                       <button
                         className="btn btn-danger btn-sm"
@@ -169,6 +183,23 @@ const ProductsPage = () => {
               />
               <Form.Control.Feedback type="invalid">
                 {errors.price}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>{t('products.personalDiscount')}</Form.Label>
+              <Form.Control
+                type="number"
+                step="0.01"
+                min="0"
+                value={formData.personalDiscount}
+                onChange={(e) => {
+                  setFormData({ ...formData, personalDiscount: e.target.value });
+                  setErrors({ ...errors, personalDiscount: '' });
+                }}
+                isInvalid={!!errors.personalDiscount}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.personalDiscount}
               </Form.Control.Feedback>
             </Form.Group>
           </Modal.Body>
