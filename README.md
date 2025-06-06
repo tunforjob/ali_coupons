@@ -91,6 +91,8 @@ src/
 │   ├── products/   # Product-related components
 │   └── results/    # Results-related components
 ├── constants/       # Application constants
+├── data/           # Data files
+│   └── sampleData.ts # Commented sample data for debugging
 ├── features/       # Redux slices and feature-specific logic
 ├── hooks/          # Custom React hooks
 ├── i18n/           # Internationalization files
