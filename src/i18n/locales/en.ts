@@ -40,16 +40,10 @@ export const en = {
   products: {
     title: 'Products',
     add: 'Add Product',
-    productName: 'Product Name',
-    productPrice: 'Product Price ($)',
-    editProduct: 'Edit Product',
-    deleteProduct: 'Delete Product',
-    actions: 'Actions',
+    edit: 'Edit Product',
     name: 'Product Name',
     price: 'Product Price ($)',
-    status: 'Status',
-    used: 'Used',
-    available: 'Available',
+    delete: 'Delete Product',
   },
   results: {
     summary: 'Summary',
