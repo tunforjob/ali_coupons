@@ -1,15 +1,29 @@
+import { useEffect } from 'react';
 import { Container, Row, Col, Navbar, Accordion } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import CouponsPage from './pages/CouponsPage';
 import ProductsPage from './pages/ProductsPage';
 import ResultsPage from './pages/ResultsPage';
+import { setLanguage } from './store/slices/languageSlice';
+import { RootState } from './store';
 import './App.scss';
 
 function App() {
   const { t, i18n } = useTranslation();
+  const dispatch = useDispatch();
+  const currentLanguage = useSelector((state: RootState) => state.language.current);
+
+  // Set the language from Redux store when component mounts
+  useEffect(() => {
+    if (currentLanguage && i18n.language !== currentLanguage) {
+      i18n.changeLanguage(currentLanguage);
+    }
+  }, [currentLanguage, i18n]);
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
+    dispatch(setLanguage(lng));
   };
 
   return (
@@ -19,19 +33,19 @@ function App() {
           <Navbar.Brand href="#home">AliExpress Coupons</Navbar.Brand>
           <div className="language-buttons">
             <button
-              className={`btn btn-outline-light ${i18n.language === 'ru' ? 'active' : ''}`}
+              className={`btn btn-outline-light ${currentLanguage === 'ru' ? 'active' : ''}`}
               onClick={() => changeLanguage('ru')}
             >
               RU
             </button>
             <button
-              className={`btn btn-outline-light ${i18n.language === 'uk' ? 'active' : ''}`}
+              className={`btn btn-outline-light ${currentLanguage === 'uk' ? 'active' : ''}`}
               onClick={() => changeLanguage('uk')}
             >
               UK
             </button>
             <button
-              className={`btn btn-outline-light ${i18n.language === 'en' ? 'active' : ''}`}
+              className={`btn btn-outline-light ${currentLanguage === 'en' ? 'active' : ''}`}
               onClick={() => changeLanguage('en')}
             >
               EN
